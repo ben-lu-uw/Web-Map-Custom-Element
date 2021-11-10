@@ -704,3 +704,13 @@ button.mapml-button:disabled,
   margin-inline-start: 0;
   width: 100%;
 }
+
+.mapml-screen-reader-output {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
