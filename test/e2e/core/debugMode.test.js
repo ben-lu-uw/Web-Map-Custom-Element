@@ -169,7 +169,7 @@ jest.setTimeout(50000);
             "xpath=//html/body/mapml-viewer >> css=div > div.leaflet-pane.leaflet-map-pane > div.leaflet-pane.leaflet-overlay-pane > svg > g",
             (tile) => tile.childElementCount
           );
-          expect(feature).toEqual(4);
+          expect(feature).toEqual(3);
         });
 
         test("[" + browserType + "]" + " Layer deselected then reselected", async () => {
