@@ -518,6 +518,9 @@ export class MapViewer extends HTMLElement {
     this.lat = location.lat;
     this.lon = location.lng;
   }
+  gcrsToPCRS(point, zoom, projection) {
+    return M.pointToPCRSPoint(point, zoom, projection, "GCRS");
+  }
   _updateMapCenter() {
     // remember to tell Leaflet event handler that 'this' in here refers to
     //  something other than the map in this case the custom polymer element
