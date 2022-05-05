@@ -25,8 +25,14 @@ export var FeatureIndexOverlay = L.Layer.extend({
         let wRatio = Math.abs(bounds.min.x - bounds.max.x) / (this._map.options.mapEl.width);
         let hRatio = Math.abs(bounds.min.y - bounds.max.y) / (this._map.options.mapEl.height);
 
-        let w = wRatio * (getComputedStyle(this._container).width).replace(/\D/g,'') / 2;
-        let h = hRatio * (getComputedStyle(this._container).height).replace(/\D/g,'') / 2;
+        let reticleDimension = (getComputedStyle(this._container).width).replace(/[^\d.]/g,'');
+        if((getComputedStyle(this._container).width).slice(-1) === "%") {
+            reticleDimension = reticleDimension * this._map.options.mapEl.width / 100;
+        }
+        console.log(getComputedStyle(this._container).width)
+        console.log(reticleDimension)
+        let w = wRatio * reticleDimension / 2;
+        let h = hRatio * reticleDimension / 2;
         let minPoint = L.point(center.x - w, center.y + h);
         let maxPoint = L.point(center.x + w, center.y - h);
         let b = L.bounds(minPoint, maxPoint);
