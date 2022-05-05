@@ -48,23 +48,23 @@ export var FeatureIndexOverlay = L.Layer.extend({
 
         body.allFeatures = [];
         keys.forEach(i => {
+            let layer = features[i].layer;
             let layers = features[i].layer._layers;
             let bounds = L.bounds();
 
             if(layers) {
                 let keys = Object.keys(layers);
                 keys.forEach(j => {
-                    if(!bounds) bounds = L.bounds(layers[j]._bounds.min, layers[j]._bounds.max);
-                    bounds.extend(layers[j]._bounds.min);
-                    bounds.extend(layers[j]._bounds.max);
+                    if(!bounds) bounds = L.bounds(layer._layers[j]._bounds.min, layer._layers[j]._bounds.max);
+                    bounds.extend(layer._layers[j]._bounds.min);
+                    bounds.extend(layer._layers[j]._bounds.max);
                 });
-            } else if(features[i].layer._bounds){
-                bounds = L.bounds(features[i].layer._bounds.min, features[i].layer._bounds.max);
+            } else if(layer._bounds){
+                bounds = L.bounds(layer._bounds.min, layer._bounds.max);
             }
 
             if(featureIndexBounds.overlaps(bounds)){
-                let group = features[i].path;
-                let label = group.getAttribute("aria-label");
+                let label = features[i].path.getAttribute("aria-label");
 
                 if (index < 8){
                     body.appendChild(this._updateOutput(label, index, index));
@@ -72,7 +72,7 @@ export var FeatureIndexOverlay = L.Layer.extend({
                 if (index % 7 === 0 || index === 1) {
                     body.allFeatures.push([]);
                 }
-                body.allFeatures[Math.floor((index - 1) / 7)].push({label, index, group});
+                body.allFeatures[Math.floor((index - 1) / 7)].push({label, index, layer});
                 if (body.allFeatures[1] && body.allFeatures[1].length === 1){
                     body.appendChild(this._updateOutput("More results", 0, 9));
                 }
@@ -110,10 +110,10 @@ export var FeatureIndexOverlay = L.Layer.extend({
         let key = e.originalEvent.keyCode;
         if (key >= 49 && key <= 55){
             let feature = body.allFeatures[body.index][key - 49];
-            let group = feature.group;
-            if (group) {
+            let layer = feature.layer;
+            if (layer) {
                 this._map.featureIndex.currentIndex = feature.index - 1;
-                group.focus();
+                layer.openPopup();
             }
         } else if(key === 56){
             this._newContent(body, -1);
