@@ -111,7 +111,8 @@ export var FeatureIndexOverlay = L.Layer.extend({
             let layer = feature.layer;
             if (layer) {
                 this._map.featureIndex.currentIndex = feature.index - 1;
-                layer.openPopup();
+                if (layer._popup) layer.openPopup();
+                else layer.options.group.focus();
             }
         } else if(key === 56){
             this._newContent(body, -1);
