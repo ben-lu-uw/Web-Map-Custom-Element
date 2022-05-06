@@ -29,8 +29,6 @@ export var FeatureIndexOverlay = L.Layer.extend({
         if((getComputedStyle(this._container).width).slice(-1) === "%") {
             reticleDimension = reticleDimension * this._map.options.mapEl.width / 100;
         }
-        console.log(getComputedStyle(this._container).width)
-        console.log(reticleDimension)
         let w = wRatio * reticleDimension / 2;
         let h = hRatio * reticleDimension / 2;
         let minPoint = L.point(center.x - w, center.y + h);

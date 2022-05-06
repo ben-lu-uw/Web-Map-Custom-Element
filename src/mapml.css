@@ -834,8 +834,6 @@ label.mapml-layer-item-toggle {
 .mapml-feature-index {
   outline: 1px solid #000000;
   contain: content;
-  /*max-height: 100%;*/
-  /*max-width: 60%;*/
   border-radius: 4px;
   background-color: #fff;
   cursor: default;
@@ -847,22 +845,30 @@ label.mapml-layer-item-toggle {
   transform: translateX(-50%);
   bottom: 30px;
   padding-top: 5px;
-  height: 75px;
-  width: 330px;
-  font-size: 12px;
-  display: flex;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
+  height: 92px;
+  width: 450px;
+  font-size: 16px;
+
+  /*display: flex;*/
+  /*text-align: center;*/
+  /*justify-content: center;*/
+  /*align-items: center;*/
 }
 
 .mapml-feature-index-content > span{
-  max-width: 100px;
+  width: 140px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
   padding-left: 5px;
   padding-right: 5px;
+}
+
+.mapml-feature-index-content > span > kbd{
+  background-color: lightgrey;
+  padding-right: 4px;
+  padding-left: 4px;
+  border-radius: 4px;
 }
 
