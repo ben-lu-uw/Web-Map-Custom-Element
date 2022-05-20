@@ -11,14 +11,16 @@ export var FeatureIndexOverlay = L.Layer.extend({
         this._output.setAttribute("aria-atomic", "true");
         this._body = L.DomUtil.create("span", "mapml-feature-index-content", this._output);
         this._body.index = 0;
-
+        this._output.initialFocus = false;
         map.on("layerchange layeradd layerremove overlayremove", this._toggleEvents, this);
         map.on('moveend focus templatedfeatureslayeradd', this._checkOverlap, this);
         map.on("keydown", this._onKeyDown, this);
         this._addOrRemoveFeatureIndex();
     },
 
-    _checkOverlap: function () {
+    _checkOverlap: function (e) {
+        if(e.type === "focus") this._output.initialFocus = true;
+        if(!this._output.initialFocus) return;
         this._map.fire("mapkeyboardfocused");
         let bounds = this._map.getPixelBounds();
         let center = bounds.getCenter();
