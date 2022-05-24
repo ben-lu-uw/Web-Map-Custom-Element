@@ -18,10 +18,7 @@ export var FeatureIndexOverlay = L.Layer.extend({
         this._addOrRemoveFeatureIndex();
     },
 
-    _checkOverlap: function (e) {
-        if(e.type === "focus") this._output.initialFocus = true;
-        if(!this._output.initialFocus) return;
-        this._map.fire("mapkeyboardfocused");
+    _calculateReticleBounds: function () {
         let bounds = this._map.getPixelBounds();
         let center = bounds.getCenter();
         let wRatio = Math.abs(bounds.min.x - bounds.max.x) / (this._map.options.mapEl.width);
@@ -36,8 +33,16 @@ export var FeatureIndexOverlay = L.Layer.extend({
         let minPoint = L.point(center.x - w, center.y + h);
         let maxPoint = L.point(center.x + w, center.y - h);
         let b = L.bounds(minPoint, maxPoint);
-        let featureIndexBounds = M.pixelToPCRSBounds(b,this._map.getZoom(),this._map.options.projection);
+        return M.pixelToPCRSBounds(b,this._map.getZoom(),this._map.options.projection);
+    },
 
+    _checkOverlap: function (e) {
+        if(e.type === "focus") this._output.initialFocus = true;
+        if(!this._output.initialFocus) return;
+
+        this._map.fire("mapkeyboardfocused");
+
+        let featureIndexBounds = this._calculateReticleBounds();
         let features = this._map.featureIndex.inBoundFeatures;
         let index = 1;
         let keys = Object.keys(features);
@@ -151,32 +156,39 @@ export var FeatureIndexOverlay = L.Layer.extend({
     },
 
     _addOrRemoveFeatureIndex: function (e) {
-        let obj = this;
         let features = this._body.allFeatures ? this._body.allFeatures.length : 0;
-        setTimeout(function() {
-            if (e && e.type === "focus") {
-                obj._container.removeAttribute("hidden");
-                if (features !== 0) obj._output.classList.remove("mapml-screen-reader-output");
-            } else if (e && e.originalEvent && e.originalEvent.type === 'pointermove') {
-                obj._container.setAttribute("hidden", "");
-                obj._output.classList.add("mapml-screen-reader-output");
-            } else if (e && e.target._popup) {
 
-            } else if (e && e.type === "blur") {
-                obj._container.setAttribute("hidden", "");
-                obj._output.classList.add("mapml-screen-reader-output");
-            } else if (obj._map.isFocused) {
-                obj._container.removeAttribute("hidden");
-                if (features !== 0) {
-                    obj._output.classList.remove("mapml-screen-reader-output");
-                } else {
-                    obj._output.classList.add("mapml-screen-reader-output");
-                }
+        if (!this._output.initialFocus) {
+            this._output.setAttribute("hidden", "");
+        } else if(this._output.hasAttribute("hidden")){
+            let obj = this;
+            setTimeout(function () {
+                obj._output.removeAttribute("hidden");
+            }, 100);
+        }
+
+        if (e && e.type === "focus") {
+            this._container.removeAttribute("hidden");
+            if (features !== 0) this._output.classList.remove("mapml-screen-reader-output");
+        } else if (e && e.originalEvent && e.originalEvent.type === 'pointermove') {
+            this._container.setAttribute("hidden", "");
+            this._output.classList.add("mapml-screen-reader-output");
+        } else if (e && e.target._popup) {
+
+        } else if (e && e.type === "blur") {
+            this._container.setAttribute("hidden", "");
+            this._output.classList.add("mapml-screen-reader-output");
+        } else if (this._map.isFocused) {
+            this._container.removeAttribute("hidden");
+            if (features !== 0) {
+                this._output.classList.remove("mapml-screen-reader-output");
             } else {
-                obj._container.setAttribute("hidden", "");
-                obj._output.classList.add("mapml-screen-reader-output");
+                this._output.classList.add("mapml-screen-reader-output");
             }
-        }, 0);
+        } else {
+            this._container.setAttribute("hidden", "");
+            this._output.classList.add("mapml-screen-reader-output");
+        }
 
     },
 
