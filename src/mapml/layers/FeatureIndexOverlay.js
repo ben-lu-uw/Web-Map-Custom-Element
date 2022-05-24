@@ -39,6 +39,10 @@ export var FeatureIndexOverlay = L.Layer.extend({
     _checkOverlap: function (e) {
         if(e.type === "focus") this._output.initialFocus = true;
         if(!this._output.initialFocus) return;
+        if(this._output.popupClosed) {
+            this._output.popupClosed = false;
+            return;
+        }
 
         this._map.fire("mapkeyboardfocused");
 
@@ -151,7 +155,7 @@ export var FeatureIndexOverlay = L.Layer.extend({
     },
 
     _toggleEvents: function (){
-        this._map.on("viewreset move moveend focus blur", this._addOrRemoveFeatureIndex, this);
+        this._map.on("viewreset move moveend focus blur popupclose", this._addOrRemoveFeatureIndex, this);
 
     },
 
@@ -167,6 +171,8 @@ export var FeatureIndexOverlay = L.Layer.extend({
             }, 100);
         }
 
+        if(e && e.type === "popupclose") this._output.popupClosed = true;
+
         if (e && e.type === "focus") {
             this._container.removeAttribute("hidden");
             if (features !== 0) this._output.classList.remove("mapml-screen-reader-output");
@@ -178,6 +184,9 @@ export var FeatureIndexOverlay = L.Layer.extend({
         } else if (e && e.type === "blur") {
             this._container.setAttribute("hidden", "");
             this._output.classList.add("mapml-screen-reader-output");
+            this._output.initialFocus = false;
+            this._body.innerHTML = "";
+            this._addOrRemoveFeatureIndex();
         } else if (this._map.isFocused) {
             this._container.removeAttribute("hidden");
             if (features !== 0) {
