@@ -186,7 +186,7 @@ export var FeatureIndexOverlay = L.Layer.extend({
             this._output.classList.add("mapml-screen-reader-output");
             this._output.initialFocus = false;
             this._addOrRemoveFeatureIndex();
-        } else if (this._map.isFocused) {
+        } else if (this._map.isFocused && e) {
             this._container.removeAttribute("hidden");
             if (features !== 0) {
                 this._output.classList.remove("mapml-screen-reader-output");
