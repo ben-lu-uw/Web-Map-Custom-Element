@@ -171,9 +171,9 @@ export var FeatureIndexOverlay = L.Layer.extend({
             }, 100);
         }
 
-        if(e && e.type === "popupclose") this._output.popupClosed = true;
-
-        if (e && e.type === "focus") {
+        if(e && e.type === "popupclose") {
+            this._output.popupClosed = true;
+        } else if (e && e.type === "focus") {
             this._container.removeAttribute("hidden");
             if (features !== 0) this._output.classList.remove("mapml-screen-reader-output");
         } else if (e && e.originalEvent && e.originalEvent.type === 'pointermove') {
@@ -185,7 +185,6 @@ export var FeatureIndexOverlay = L.Layer.extend({
             this._container.setAttribute("hidden", "");
             this._output.classList.add("mapml-screen-reader-output");
             this._output.initialFocus = false;
-            this._body.innerHTML = "";
             this._addOrRemoveFeatureIndex();
         } else if (this._map.isFocused) {
             this._container.removeAttribute("hidden");
