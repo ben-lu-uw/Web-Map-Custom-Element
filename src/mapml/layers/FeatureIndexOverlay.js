@@ -94,6 +94,8 @@ export var FeatureIndexOverlay = L.Layer.extend({
     _updateOutput: function (label, index, key) {
         let span = document.createElement("span");
         span.setAttribute("data-index", index);
+        //", " adds a brief auditory pause when a screen reader is reading through the feature index
+        //also prevents names with numbers + key from being combined when read
         span.innerHTML =  `<kbd>${key}</kbd>` + " " + label + "<span>, </span>";
         return span;
     },
@@ -161,17 +163,18 @@ export var FeatureIndexOverlay = L.Layer.extend({
 
     _addOrRemoveFeatureIndex: function (e) {
         let features = this._body.allFeatures ? this._body.allFeatures.length : 0;
-
+        //Toggle aria-hidden attribute so screen reader rereads the feature index on focus
         if (!this._output.initialFocus) {
-            this._output.setAttribute("hidden", "");
-        } else if(this._output.hasAttribute("hidden")){
+            this._output.setAttribute("aria-hidden", "true");
+        } else if(this._output.hasAttribute("aria-hidden")){
             let obj = this;
             setTimeout(function () {
-                obj._output.removeAttribute("hidden");
+                obj._output.removeAttribute("aria-hidden");
             }, 100);
         }
 
         if(e && e.type === "popupclose") {
+            this._output.setAttribute("aria-hidden", "true");
             this._output.popupClosed = true;
         } else if (e && e.type === "focus") {
             this._container.removeAttribute("hidden");
