@@ -94,7 +94,7 @@ export var FeatureIndexOverlay = L.Layer.extend({
     _updateOutput: function (label, index, key) {
         let span = document.createElement("span");
         span.setAttribute("data-index", index);
-        span.innerHTML = `<kbd>${key}</kbd>` + " " + label;
+        span.innerHTML =  `<kbd>${key}</kbd>` + " " + label + "<span>, </span>";
         return span;
     },
 
