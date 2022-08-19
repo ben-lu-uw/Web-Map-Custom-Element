@@ -8,6 +8,7 @@
   min-width: 100%;
   width: 100% !important;
   height: 100% !important;
+  outline: 0;
 }
 
 /* this is required by tiles which are actually divs with multiple images in them */
@@ -26,13 +27,6 @@
 }
 .leaflet-image-loaded {
         visibility: inherit;
-}
-
-/* Use legible font-sizes (Leaflet upstream PR: https://github.com/Leaflet/Leaflet/pull/7346). */
-.leaflet-control-scale-line,
-.leaflet-container .leaflet-control-scale,
-.leaflet-container .leaflet-control-attribution {
-  font-size: 12px;
 }
 
 /*
@@ -447,11 +441,7 @@
   outline-width: thin !important;
   outline: revert !important;
 }
-/* Unset the outline that Leaflet occasionally sets on controls without also
-   delegating focus. */
-.leaflet-active:not(:focus) {
-  outline: unset !important;
-}
+
 .leaflet-container:not(:focus-within) .mapml-outline {
   outline: 0;
 }
@@ -583,9 +573,6 @@ summary {
 .mapml-popup-content > :not(.mapml-focus-buttons) {
   padding: 0 1rem;
 }
-.leaflet-popup-tip-container {
-  margin-top: -1px;
-}
 
 .mapml-outline {
   outline-style: auto;
@@ -596,15 +583,6 @@ summary {
   height: 100%;
   width: 100%;
   color: initial;
-}
- 
- /* Force printers to include background-images of controls for printing.
-   (https://github.com/Maps4HTML/Web-Map-Custom-Element/issues/294) */
-@media print {
-  .leaflet-control {
-    -webkit-print-color-adjust: exact;
-                  color-adjust: exact;
-  }
 }
 
 .leaflet-pane > svg g.leaflet-interactive,
